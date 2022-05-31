@@ -1,8 +1,6 @@
 from fastapi import FastAPI, Path
 from typing import Optional
 from pydantic import BaseModel
-from flask import Flask, request
-import os
 
 app = FastAPI()
 
