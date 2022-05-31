@@ -60,7 +60,7 @@ async def startup():
 async def shutdown():
     await database.disconnect()
 
-@app.get("/pesquisar-carta/", response_model=Carta)
+@app.get("/Pesquisar-carta/", response_model=Carta)
 async def pequisar_carta(nome: Optional[str] = None):
     
     query =  cartas.select().where(cartas.c.nome == nome)
@@ -68,14 +68,14 @@ async def pequisar_carta(nome: Optional[str] = None):
     return await database.fetch_one(query)
     
 
-@app.get("/listar-cartas/", response_model=List[Carta])
-async def listar_cartas():
+@app.get("/Listar-Cartas/", response_model=List[Carta])
+async def listar_Cartas():
     query = cartas.select()
     return await database.fetch_all(query)
 
 
-@app.put('/atualizar-carta', response_model=CartaAtualizavel)
-async def atualizar_carta(nome_da_carta: str, carta: CartaAtualizavel):
+@app.put('/Atualizar-carta', response_model=CartaAtualizavel)
+async def atualizar_Carta(nome_da_carta: str, carta: CartaAtualizavel):
 
     query = cartas.update().where(cartas.c.nome == nome_da_carta).values(preco=carta.preco, 
     quantidade=carta.quantidade)
@@ -85,7 +85,7 @@ async def atualizar_carta(nome_da_carta: str, carta: CartaAtualizavel):
     return {**carta.dict(), "id": carta}
 
 
-@app.post("/criar-cartas/", response_model=Carta)
+@app.post("/Criar-Cartas/", response_model=Carta)
 async def criar_Cartas(carta: Carta):
     query = cartas.insert().values(nome=carta.nome, edicao=carta.edicao, idioma=carta.idioma, 
     foil=carta.foil, preco=carta.preco, quantidade=carta.quantidade)
