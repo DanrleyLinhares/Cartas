@@ -13,7 +13,7 @@ database = databases.Database(DATABASE_URL)
 
 metadata = sqlalchemy.MetaData()
 
-notes = sqlalchemy.Table(
+cartas = sqlalchemy.Table(
     "Cartas",
     metadata,
     sqlalchemy.Column("nome", sqlalchemy.String, primary_key=True),
@@ -29,10 +29,6 @@ engine = sqlalchemy.create_engine(
     DATABASE_URL
 )
 metadata.create_all(engine)
-
-
-
-cartas = []
 
 
 class Carta(BaseModel):
@@ -67,21 +63,21 @@ async def shutdown():
 @app.get("/Pesquisar-carta/", response_model=Carta)
 async def pequisar_carta(nome: Optional[str] = None):
     
-    query =  notes.select().where(notes.c.nome == nome)
+    query =  cartas.select().where(cartas.c.nome == nome)
 
     return await database.fetch_one(query)
     
 
 @app.get("/Listar-Cartas/", response_model=List[Carta])
 async def listar_Cartas():
-    query = notes.select()
+    query = cartas.select()
     return await database.fetch_all(query)
 
 
 @app.put('/Atualizar-carta', response_model=CartaAtualizavel)
 async def atualizar_Carta(nome_da_carta: str, carta: CartaAtualizavel):
 
-    query = notes.update().where(notes.c.nome == nome_da_carta).values(preco=carta.preco, 
+    query = cartas.update().where(cartas.c.nome == nome_da_carta).values(preco=carta.preco, 
     quantidade=carta.quantidade)
 
     await database.execute(query)
@@ -91,13 +87,13 @@ async def atualizar_Carta(nome_da_carta: str, carta: CartaAtualizavel):
 
 @app.post("/Criar-Cartas/", response_model=Carta)
 async def criar_Cartas(carta: Carta):
-    query = notes.insert().values(nome=carta.nome, edicao=carta.edicao, idioma=carta.idioma, 
+    query = cartas.insert().values(nome=carta.nome, edicao=carta.edicao, idioma=carta.idioma, 
     foil=carta.foil, preco=carta.preco, quantidade=carta.quantidade)
     last_record_id = await database.execute(query)
     return {**carta.dict(), "id": last_record_id}
 
 @app.delete("/deletar-carta/")
 async def deletar_carta(nome_da_carta: str):
-    query = notes.delete().where(notes.c.nome == nome_da_carta)
+    query = cartas.delete().where(cartas.c.nome == nome_da_carta)
     await database.execute(query)
     return {"Messagem": "A carta deletada com sucesso!"}
