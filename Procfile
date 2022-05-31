@@ -1,3 +1,1 @@
-web: gunicorn api:app --log-file - --log-level debug
-python api.py collectstatic --noinput
-api.py migrate
+web: uvicorn api:app --host=0.0.0.0 --port=${PORT:-5000}
