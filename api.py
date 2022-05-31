@@ -38,7 +38,7 @@ def pequisar_carta(nome: Optional[str] = None):
 
 @app.get('/Listar-cartas')
 def listar():
-    return {'Cartas': sorted(cartas, key=lambda carta: True)}
+    return {'Cartas': cartas}
 
 
 @app.post('/Criar-carta')
